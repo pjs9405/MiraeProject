@@ -12,7 +12,42 @@
   - 활용 언어 : python
   - 개발 환경 : Jupyter Notebook & Colab
 ## 4. 실행 화면
-![ex_1](./images/ex_1.png)
+```python
+from sklearn.model_selection import train_test_split
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.layers import LSTM
+
+m_data.sort_values(by=['그룹번호','기준년월','종목번호'],inplace = True)
+d_data.sort_values(by=['그룹번호','기준년월','종목번호','기준일자'],inplace = True)
+
+train_feature, train_label = make_dataset(d_data[['TEMA', 'CMF', 'MACD Oscillator', 'Stochastic Oscillator',
+       '개인 순매수','KOSPI','S&P500']],
+                                                  m_data['매수고객수'],19)
+
+x_train, x_valid, y_train, y_valid = train_test_split(train_feature, train_label,
+                                                      test_size=0.2)
+
+model = Sequential()
+model.add(LSTM(16, 
+                input_shape=(train_feature.shape[1], train_feature.shape[2]), 
+                activation='relu', 
+                return_sequences=False))
+model.add(Dense(1,))
+model.summary()
+model.compile(loss='mean_squared_error', optimizer='adam')
+early_stop = EarlyStopping(monitor='val_loss', patience=15)
+filename = filepath+'result.h5'
+checkpoint = ModelCheckpoint(filename, monitor='val_loss', verbose=1, 
+                              save_best_only=True, mode='auto')
+history = model.fit(x_train, y_train, 
+                    epochs=200, 
+                    batch_size=16,
+                    validation_data=(x_valid, y_valid), 
+                    callbacks=[early_stop, checkpoint])    
+print('Finish')
+```
 - 입력 데이터 : 종가, TENA, CMF, NACD Oscillator, Stochastic Oscillator, 개인 순매수, g_vec
 - 출력 데이터 : 매수 고객 수
 - LSTM 모델 활용
