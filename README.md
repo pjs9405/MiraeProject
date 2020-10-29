@@ -54,12 +54,12 @@ print('Finish')
 - Optimizer은 Adam 활용
 - Checkpoint 함수를 사용하여 가장 좋은 성능의 파라미터를 파일에 저장
 - EarlyStopping을 활용하여, 더 이상 성능이 개선되지 않을 시 15번까지 반복 후 종료
-
+---
 ![ex_3](./images/ex_3.png)
 - 2번 그룹의 매수 고객 상위 종목 list
 - 매수 고객 수는 minmaxscaler를 활용하여, 0과 1사이의 값으로 변환
 - 현재 20년 7월 Top3 대상여부에 2개 종목 적중
-
+---
 ![ex_2](./images/ex_2.png)
 - 상위 3개 종목 48개 그룹의 종목 수(144개) 중 71개 적중
 - 약 49%의 정확도 확인
